@@ -243,19 +243,3 @@ fig <- plot_ly(Train_sales, x = ~reorder(Items_Tier_1, Sales_tier_1), y = ~Sales
          yaxis = list(title = "Maximum Sales"))
 
 fig
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
