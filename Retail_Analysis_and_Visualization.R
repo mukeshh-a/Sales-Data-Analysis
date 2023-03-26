@@ -1,3 +1,5 @@
+All the codes goes as follows:
+
 # Import required libraries
 
 library(tidyverse)
