@@ -552,17 +552,3 @@ Another important observation is that Tier 2 and 3 cities have outperformed Tier
 7. Determine the impact of Product Visibility: We can conduct further analysis to determine the impact of product visibility on sales and optimize our product placement in stores accordingly.
 
 By implementing these suggestions and continuing to analyze the sales data, we can make data-driven decisions that will help us optimize our purchasing patterns, improve sales, and launch a successful chain of supermarkets and grocery stores across the country.
-
-
-
-
-
-
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
