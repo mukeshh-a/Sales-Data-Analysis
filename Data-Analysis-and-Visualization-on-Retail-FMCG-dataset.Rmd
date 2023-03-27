@@ -1,0 +1,568 @@
+---
+title: "Data-Analysis-and-Visualization-on-Retail-FMCG-dataset"
+author: "Mukesh Ale"
+date: "2023-03-26"
+output:
+  html_document:
+    df_print: paged
+---
+
+As a data analyst, I believe that the BigMart Sales dataset is a perfect fit for understanding how data is handled in the Retail/FMCG domain. By working with this dataset, we can manipulate the data to our advantage and draw key insights that will help us optimize purchasing patterns for the company’s chain of supermarkets and grocery stores.
+
+Considering myself as part of the Analytics and Insights Team, my goal is to identify the factors that impact sales and use this information to make informed decisions about what products to stock, where to stock them, and how to price them. I want to know how outlet type, city type, outlet size, product category, product visibility, and product weight impact sales.
+
+Using the ‘Train.csv’ training dataset from the BigMart Sales Data, I plan to conduct a thorough analysis of the data to answer these questions.
+
+1. Which outlet type (grocery store or supermarket) has the biggest impact on overall sales?
+
+2. Which type of city has the most overall sales / Which outlet location makes the most overall sales?
+
+3. Whether outlet size has any impact on overall sales?
+
+4. Which product categories sell the most and the least?
+
+5. Whether product visibility and weight have any impact on sales and determine the average MRP of the product that sells the most and the least?
+
+6. Which categories these products fall under?
+
+7. Which products sell better in Tier 1 cities compared to Tier 2 and Tier 3 cities and whether any products are selling better in Tier 2 and 3 cities as compared to Tier 1 cities.
+
+Overall, I am confident that by using the BigMart Sales dataset, we can optimize the purchasing patterns and make data-driven decisions that will help the company launch a successful chain of supermarkets and grocery stores across the country.
+
+## Pre-Processing of data
+
+To get started with the analysis of the BigMart Sales dataset, I need to import some useful libraries that will help me manipulate and analyze the data and later help me to visualize it.
+
+Since I am comfortable working in R, I will be using R environment.
+
+To begin with, I will import some necessary packages that will aid me in data manipulation and analysis.
+
+Some of the important packages include dplyr, readr, and ggplot2.
+
+The readr package will help me to read the dataset into R environment, while dplyr package will assist me in data manipulation tasks like filtering, summarizing, and transforming the dataset.
+
+Finally, the ggplot2 package will aid me in visualizing the data.
+
+Once I have loaded the required libraries, I will read the dataset into R using the read_csv() function from readr package.
+
+This function will allow me to read the data from the ‘Train.csv’ file and store it in a data frame named as Train.
+
+After reading the dataset, I will start pre-processing the data by cleaning it and dealing with missing values.
+
+This will involve tasks like identifying and removing duplicates, checking for missing values, and imputing the missing values using appropriate methods.
+
+Once the data is cleaned and processed, I will proceed with the analysis of the dataset to answer the questions posed by the procurement and logistics team.
+
+```{r}
+# Import the required libraries
+
+library(dplyr)
+library(ggplot2)
+library(readr)
+```
+
+```{r}
+# Import the dataset
+
+Train <- read_csv("Train.csv")
+```
+
+```{r}
+# Have a look at the data
+
+head(Train)
+tail(Train)
+```
+
+```{r}
+# Check the data summary for future use
+
+summary(Train)
+```
+
+```{r}
+# See the data
+
+Train
+```
+
+The columns ‘Item_Identifier’ and ‘Outlet_Identifier’ will be dropped from the dataset as they are not useful.
+
+```{r}
+Train <- Train[ , -c( 1, 7)]
+
+Train
+```
+
+Let’s Conduct an exploratory data analysis (EDA) on our dataset before we can address any questions.
+
+Get the number of missing values in each column
+
+```{r}
+colSums(is.na(Train))
+```
+
+After analyzing the dataset, we have noticed that only two columns, namely 'Item_Weight' and 'Outlet_Size', contain missing values.
+
+As a solution, we can perform imputation techniques to fill in these missing values.
+
+For numerical variables like 'Item_Weight', we can opt for either mean or median imputation.
+
+However, before we decide which one to use, we need to check if there are any outliers present in the data.
+
+We can do this by looking at the boxplot for the variable.
+
+Once we have identified whether outliers are present or not, we can then choose the most appropriate imputation method.
+
+For categorical variables like 'Outlet_Size', we can use mode imputation.
+
+```{r}
+# Plotting a box plot
+
+ggplot(Train, aes(y = Item_Weight)) + 
+  geom_boxplot()
+```
+
+Given that we do not have any outliers, we can confidently replace missing values with mean to the 'Item_Weight' column.
+
+```{r}
+Train$Item_Weight[is.na(Train$Item_Weight)] <- mean(Train$Item_Weight, na.rm = TRUE)
+```
+
+```{r}
+# Check if the NULL values are gone.
+
+sum(is.na(Train$Item_Weight))
+```
+
+We have successfully filled all missing values for 'Item_Weight' column.
+
+Replace missing values with mode to the 'Outlet_Size' column.
+
+```{r}
+Train <- Train %>% 
+  mutate(Outlet_Size = ifelse(is.na(Outlet_Size), names(which.max(table(Outlet_Size))), Outlet_Size))
+```
+
+```{r}
+# Check if the Null values are gone
+
+sum(is.na(Train$Outlet_Size))
+```
+
+```{r}
+colSums(is.na(Train))
+```
+
+We are good to go now.
+
+# Analysis of sales associated with each factor.
+
+## Outlet Type v/s Sales
+
+To analyze the potential correlation between outlet type and sales, we will be utilizing R’s group_by() function.
+
+The group_by() function is commonly used to aggregate and manipulate large datasets based on grouping factors.
+
+In this analysis, we will combine group_by() with other useful functions in R, such as summarise(), arrange().
+
+```{r}
+# Group data by 'Outlet_Type' and sum of 'Item_Outlet_Sales'
+
+outlet_type_sales <- Train %>% 
+  group_by(Outlet_Type) %>% 
+  summarise(Item_Outlet_Sales = sum(Item_Outlet_Sales)) %>% 
+  arrange(desc(Item_Outlet_Sales)) %>% 
+  ungroup()
+```
+
+The above R code groups the ‘Train’ dataset by ‘Outlet_Type’ and calculates the sum of ‘Item_Outlet_Sales’ for each Outlet Type using the ‘summarise’ function from the dplyr package.
+
+The resulting data is stored in a new variable named ‘outlet_type_sales’.
+
+To arrange the obtained dataframe in descending order based on sales, the ‘arrange’ function is used, followed by the ‘desc’ function to specify descending order for the ‘Item_Outlet_Sales’ column.
+
+Finally, the ‘ungroup’ function is used to remove the grouping variable and obtain the overall sales per outlet type in a clean and organized format.
+
+Let’s check the output
+
+```{r}
+outlet_type_sales
+```
+
+‘Supermarket Type 1’ has the highest overall sales compared to all other outlet types, while ‘Grocery Store’ has the lowest sales.
+
+To enhance our understanding further, we will create a visual representation of this data using the ggplot2 library, which we imported at the beginning.
+
+Visualizing the data allows us to identify correlations and patterns more easily.
+
+Create bar chart using ggplot2
+
+```{r}
+outlet_type_sales <- outlet_type_sales[order(-outlet_type_sales$Item_Outlet_Sales),]
+
+ggplot(outlet_type_sales, aes(reorder(Outlet_Type, -Item_Outlet_Sales), Item_Outlet_Sales)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Total Sales by Outlet Type", x = "Outlet Type", y = "Total Sales")
+```
+
+This code creates a bar chart using the ggplot library in R to display the total sales for each outlet type in the dataset.
+
+The x-axis shows the different types of outlets while the y-axis shows the total sales.
+
+The graph title is “Total Sales by Outlet Type” and the x and y axis labels provide additional information.
+
+The geom_bar() function creates the actual bars of the chart, while the “identity” parameter ensures that the height of the bars corresponds to the actual data values.
+
+## Sales per outlet location
+
+Group the sales data in the Train dataset based on the outlet location type and then sum up the sales for each location type.
+
+Then arrange the data in descending order of sales to understand which location type generates the highest sales.
+
+```{r}
+location_type_sales <- Train %>%
+  group_by(Outlet_Location_Type) %>%
+  summarize(Item_Outlet_Sales = sum(Item_Outlet_Sales)) %>%
+  arrange(desc(Item_Outlet_Sales))
+```
+
+The second line groups the Train dataset based on the Outlet_Location_Type and then calculates the sum of the Item_Outlet_Sales for each group.
+
+The last line arranges the data in descending order of Item_Outlet_Sales.
+
+The resulting dataset is stored in the location_type_sales variable.
+
+Let’s see the output
+
+```{r}
+location_type_sales
+```
+
+The output reveals that Tier 3 cities have the highest sales followed by Tier 2 and Tier 1 cities,
+
+which challenges the common belief that Tier 1 cities would generate the most sales.
+
+To visualize the sales distribution across different location types, we can use ggplot2.
+
+```{r}
+# Plot a bar chart
+
+ggplot(location_type_sales, aes(x=Outlet_Location_Type, y=Item_Outlet_Sales)) + 
+  geom_bar(stat="identity") +
+  labs(x="Outlet Location Type", y="Total Sales") +
+  ggtitle("Total Sales by Outlet Location Type") +
+  theme_bw()
+```
+
+## Outlet size and it’s sales
+
+Now, we will conduct a similar analysis to see the correlation between outlet size and sales.
+
+We will group the data by outlet size and calculate the sum of corresponding sales.
+
+This will help us identify any patterns in sales with respect to the size of the outlet.
+
+```{r}
+outlet_size_sales <- aggregate(Train$Item_Outlet_Sales, by = list(Train$Outlet_Size), FUN = sum)
+names(outlet_size_sales) <- c("Outlet_Size", "Item_Outlet_Sales")
+outlet_size_sales <- outlet_size_sales %>%
+  arrange(Item_Outlet_Sales)
+
+outlet_size_sales
+```
+
+The analysis shows that ‘Medium-sized’ outlets have outperformed both ‘Small’ and ‘High-sized’ outlets in terms of sales.
+
+This observation is further supported by the visualization using ggplot2.
+
+Create a bar chart using ggplot2
+
+```{r}
+ggplot(outlet_size_sales, aes(x = Outlet_Size, y = Item_Outlet_Sales)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Total Sales by Outlet Size", x = "Outlet Size", y = "Total Sales")
+```
+
+Sorting the bars
+
+```{r}
+ggplot(outlet_size_sales, aes(x = reorder(Outlet_Size, Item_Outlet_Sales, sum), y = Item_Outlet_Sales)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Total Sales by Outlet Size", x = "Outlet Size", y = "Total Sales")
+```
+
+## Item type and Item Outlet Sales
+
+We will be using the ‘group_by()’ function in R to group the data based on the outlet size and then calculate the sum of corresponding sales.
+
+By doing so, we can identify any patterns in sales with respect to the size of the outlet.
+
+The code ‘train_max_sales’ first groups the data by ‘Item_Type’ and then calculates the maximum sales for each item type, which is stored in a new variable ‘Max_Item_Outlet_Sales’.
+
+The data is then arranged in descending order based on the maximum sales.
+
+```{r}
+train_max_sales <- Train %>%
+  group_by(Item_Type) %>%
+  summarize(Max_Item_Outlet_Sales = max(Item_Outlet_Sales)) %>%
+  arrange(desc(Max_Item_Outlet_Sales))
+
+train_max_sales
+```
+
+When we conduct the analysis, we will observe that the ‘Household’ item category will sell the most, followed by ‘Fruits and Vegetables’.
+
+Conversely, the ‘Others’ item category will sell the least, while keeping all cities, outlet size, and outlet type constant.
+
+Visualizing the results using ggplot2
+
+Create a bar chart using ggplot2
+
+```{r}
+ggplot(train_max_sales, aes(x=reorder(Item_Type, Max_Item_Outlet_Sales), y=Max_Item_Outlet_Sales)) +
+  geom_bar(stat="identity") +
+  coord_flip() +
+  labs(title="Max Item Outlet Sales by Item Type", x="Item Type", y="Max Item Outlet Sales") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Item Visibility v/s Sales
+
+Now We will first identify any rows with Item Visibility as 0 and remove them from the dataset.
+
+After that, we will group the data by Item Visibility and aggregate the corresponding sales.
+
+Finally, we will arrange the obtained data in descending order of sales to find any patterns in sales with respect to the visibility of items.
+
+```{r}
+unique(Train$Item_Visibility)
+```
+
+```{r}
+Train <- Train[Train$Item_Visibility != 0, ]
+
+Train$Item_Visibility
+```
+
+```{r}
+item_visibility_sales <- aggregate(Train$Item_Outlet_Sales, by = list(Train$Item_Visibility), FUN = sum)
+names(item_visibility_sales) <- c("Item_Visibility", "Item_Outlet_Sales")
+item_visibility_sales <- item_visibility_sales[order(-item_visibility_sales$Item_Outlet_Sales),]
+```
+
+```{r}
+item_visibility_sales
+```
+
+```{r}
+# Visualize it using ggplot2 with a scatter plot
+
+ggplot(Train, aes(x = Item_Visibility, y = Item_Outlet_Sales, color = Item_Visibility)) +
+  geom_point() +
+  labs(x = "Item Visibility", y = "Item Outlet Sales", color = "Item Visibility")+ 
+  scale_color_gradient(low = "blue", high = "red")
+```
+
+We observed that items with moderate visibility generate the most sales, whereas items with high visibility do not necessarily generate more sales.
+
+This may be due to various reasons, such as higher visibility products being more expensive or less practical to purchase in bulk.
+
+We will now check if the analysis of “Item_Weight” produces similar results.
+
+## Item Weight v/s Sales
+
+To ensure data quality, we need to check if the minimum value of the “Item_Weight” variable is greater than or equal to 0.
+
+If it is, then we can proceed with our analysis to see if there is any correlation between “Item_Weight” and sales.
+
+```{r}
+min(Train$Item_Weight)
+```
+
+After confirming that the minimum value for the ‘Item_Weight’ variable is 4.555 units, we can now proceed with the next steps in the analysis.
+
+```{r}
+item_weight_sales <- Train %>%
+  group_by(Item_Weight) %>%
+  summarize(Total_Item_Outlet_Sales = sum(Item_Outlet_Sales)) %>%
+  arrange(desc(Total_Item_Outlet_Sales))
+
+item_weight_sales
+```
+
+The analysis shows that the highest sales are generated by products with a weight of 12.85765 units, while items with a weight of around 6.440 units have the least sales.
+
+Visualize it using ggplot2
+
+```{r}
+# Scatter plot using ggplot2
+
+ggplot(Train, aes(x = Item_Weight, y = Item_Outlet_Sales, color = Item_Weight)) +
+  geom_point() +
+  labs(title = "Item Weight vs Item Outlet Sales", x = "Item Weight", y = "Item Outlet Sales") +
+  scale_color_gradient(low = "blue", high = "red")
+```
+
+## Item MRP v/s Sales
+
+We will now analyze the Sales for the products of different MRP
+
+```{r}
+train_max_sales <- Train %>%
+  group_by(Item_MRP) %>%
+  summarize(Max_Item_Outlet_Sales = max(Item_Outlet_Sales)) %>%
+  arrange(desc(Max_Item_Outlet_Sales))
+
+train_max_sales
+```
+
+The output reveals that the product with the highest sales is the one with MRP 234.9958.
+On the other hand, the item with MRP 35.0558 has the lowest sales.
+
+We will proceed to identify these items.
+
+```{r}
+subset(Train, Item_MRP == 234.9958)$Item_Type
+```
+
+```{r}
+subset(Train, Item_MRP == 35.0558)$Item_Type
+```
+
+The item types that correspond to an MRP of 244.996 are ‘Fruits and Vegetables’ and ‘Household’.
+
+On the other hand, the item type that corresponds to an MRP of 35.0558 is 'Snack Foods'. Visualize it using ggplot2
+
+```{r}
+# Scatter plot using ggplot2
+
+ggplot(train_max_sales, aes(x = Item_MRP, y = Max_Item_Outlet_Sales, color = Max_Item_Outlet_Sales)) +
+  geom_point() +
+  xlab("Item MRP") +
+  ylab("Maximum Item Outlet Sales") +
+  ggtitle("Maximum Outlet Sales vs Item MRP") +
+  scale_color_gradient(low = "blue", high = "red")
+```
+
+## Products that sell better in Tier 1 cities as compared to Tier 2 and Tier 3 cities
+
+To conduct a more detailed analysis, we will split the data into two categories - Tier 1 cities and Tier 2 & 3 cities, resulting in two separate dataframes.
+
+The code for splitting the data is as follows:
+
+```{r}
+Train_tier1 <- subset(Train, Outlet_Location_Type == "Tier 1")
+
+Train_tier2 <- subset(Train, Outlet_Location_Type == "Tier 2")
+
+Train_tier3 <- subset(Train, Outlet_Location_Type == "Tier 3")
+
+Train_cities <- rbind(Train_tier2, Train_tier3)
+```
+
+We will split the data into two categories: Tier 1 cities and Tier 2 & 3 cities, which will result in two different dataframes named “Train_tier1” and “Train_cities”.
+
+We will then analyze the performance of each product separately for Tier 1 cities and Tier 2 & 3 cities.
+
+```{r}
+Train_tier1_list <- Train_tier1 %>%
+  group_by(Item_Type) %>%
+  summarize(Sales_tier_1 = max(Item_Outlet_Sales)) %>%
+  arrange(desc(Sales_tier_1)) %>%
+  rename(Items_Tier_1 = Item_Type, Sales_tier_1 = Sales_tier_1)
+
+Train_tier1_list
+```
+
+```{r}
+Train_cities_list <- Train %>%
+  filter(Outlet_Location_Type %in% c("Tier 2", "Tier 3")) %>%
+  group_by(Item_Type) %>%
+  summarize(Sales_tier2_3 = max(Item_Outlet_Sales)) %>%
+  arrange(desc(Sales_tier2_3)) %>%
+  rename(Items_Tier2_3 = Item_Type)
+
+Train_cities_list
+```
+
+We can combines the two data frames ‘Train_tier1_list’ and ‘Train_cities_list’ into a single data frame named ‘Train_sales’ using the ‘cbind’ function.
+
+This helps us to see the sales corresponding to each item type for the two categories of cities in a single dataframe.
+
+The resulting dataframe will be a combination of sales data for each item type in the two categories of cities.
+
+This will enable us to compare sales performance across different item types and city categories.
+
+```{r}
+Train_sales <- cbind(Train_tier1_list, Train_cities_list)
+Train_sales
+```
+
+```{r}
+Train_sales <- Train_sales %>%
+  arrange(Sales_tier_1) 
+```
+
+```{r}
+ggplot(Train_sales, aes(x = reorder(Items_Tier_1, Sales_tier_1), y = Sales_tier_1)) +
+  geom_line(color = "blue", aes(group = 1)) +
+  geom_point(color = "blue") +
+  geom_line(aes(x = Items_Tier_1, y = Sales_tier2_3, group = 1), color = "red") +
+  geom_point(aes(x = Items_Tier_1, y = Sales_tier2_3), color = "red") +
+  labs(title = "Maximum Sales by Item Type and Location Type",
+       x = "Item Type",
+       y = "Maximum Sales") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+```
+
+Based on a quick look at the graph, it is evident that no item type has performed better in Tier 1 cities compared to Tier 2 & 3 cities, except for the ‘Others’ category with a negligible margin.
+
+The sales generated by Tier 2 and 3 cities have surpassed those of Tier 1 cities. This concludes our analysis.
+
+## After analyzing the sales data, we can draw the following conclusions: 
+
+1. Supermarket Type 1 has made the most sales, indicating that this type of supermarket is preferred by customers. This can be due to several reasons such as availability of a wider range of products, lower prices, or better customer service.
+
+2. Tier 3 cities have generated the most sales, followed by Tier 2 cities. This suggests that these cities have a higher demand for the products sold by the supermarket, possibly due to lower availability of other shopping options or lower prices compared to other retailers.
+
+3. Medium-sized outlets have been the most successful in terms of sales. This could be because these outlets strike a balance between having enough variety of products and maintaining a comfortable shopping experience for customers.
+
+4. Household items have been the most popular category, which is not surprising as these are necessities that are required by almost every household.
+
+5. Items with a weight of 12.85765 units have made the most sales. This could be due to the fact that these items are either more commonly used or are priced in a way that makes them more attractive to customers.
+
+Another important observation is that Tier 2 and 3 cities have outperformed Tier 1 cities in terms of sales for all types of items except for the category ‘Others’. This suggests that the supermarket could focus on expanding their presence in these cities and potentially consider offering more variety of products in the ‘Others’ category to boost sales in Tier 1 cities.
+
+## Based on these conclusions, some suggestions that could be made are:
+
+1. Focus on Supermarket Type 1: As this type of supermarket has generated the most sales, we can focus on opening more Type 1 supermarkets in areas where there is a higher demand for our products.
+
+2. Target Tier 2 and 3 cities: Since these cities have outperformed Tier 1 cities in terms of sales, we can consider expanding our presence in these areas by opening more outlets and providing more variety of products that are in high demand.
+
+3. Optimize Outlet Size: Medium-sized outlets have been the most successful in terms of sales, indicating that we can optimize our outlet size to maintain a balance between having enough product variety and providing a comfortable shopping experience for customers.
+
+4. Promote Household Items: As this category has been the most popular, we can focus on promoting and offering more household items in our stores to cater to the high demand.
+
+5. Offer More Variety in ‘Others’ Category: As Tier 1 cities have shown lower sales for the ‘Others’ category, we can offer more variety of products in this category to boost sales in these areas.
+
+6. Analyze Product Weight: We can analyze the reasons behind the higher sales of items with a weight of 12.85765 units and potentially offer more products that are of a similar weight to cater to customer preferences.
+
+7. Determine the impact of Product Visibility: We can conduct further analysis to determine the impact of product visibility on sales and optimize our product placement in stores accordingly.
+
+By implementing these suggestions and continuing to analyze the sales data, we can make data-driven decisions that will help us optimize our purchasing patterns, improve sales, and launch a successful chain of supermarkets and grocery stores across the country.
+
+
+
+
+
+
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
