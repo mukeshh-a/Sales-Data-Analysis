@@ -1,39 +1,55 @@
 After analyzing the sales data, we can draw the following conclusions:
 
-  1. Supermarket Type 1 has made the most sales, indicating that this type of supermarket is preferred by customers. 
-     This can be due to several reasons such as availability of a wider range of products, lower prices, or better customer service.
+1. Supermarket Type 1 has made the most sales, indicating that this type of supermarket is preferred by
+customers. This can be due to several reasons such as availability of a wider range of products, lower
+prices, or better customer service.
 
-  2. Tier 3 cities have generated the most sales, followed by Tier 2 cities. 
-     This suggests that these cities have a higher demand for the products sold by the supermarket, possibly due to lower availability of other shopping options or lower prices compared to other retailers.
+2. Tier 3 cities have generated the most sales, followed by Tier 2 cities. This suggests that these cities
+have a higher demand for the products sold by the supermarket, possibly due to lower availability of
+other shopping options or lower prices compared to other retailers.
 
-  3. medium-sized outlets have been the most successful in terms of sales. 
-     This could be because these outlets strike a balance between having enough variety of products and maintaining a comfortable shopping experience for customers.
+3. Medium-sized outlets have been the most successful in terms of sales. This could be because these
+outlets strike a balance between having enough variety of products and maintaining a comfortable
+shopping experience for customers.
 
-  4. household items have been the most popular category, which is not surprising as these are necessities that are required by almost every household.
+4. Household items have been the most popular category, which is not surprising as these are necessities
+that are required by almost every household.
 
-  5. items with a weight of 12.6 units have made the most sales. This could be due to the fact that these items are either more commonly used or are priced in a way that makes them more attractive to customers.
-     Another important observation is that Tier 2 and 3 cities have outperformed Tier 1 cities in terms of sales for all types of items except for the category ‘Others’. 
-     This suggests that the supermarket could focus on expanding their presence in these cities and potentially consider offering more variety of products in the ‘Others’ category to boost sales in Tier 1 cities.
+5. Items with a weight of 12.85765 units have made the most sales. This could be due to the fact that
+these items are either more commonly used or are priced in a way that makes them more attractive to
+customers.
+
+Another important observation is that Tier 2 and 3 cities have outperformed Tier 1 cities in terms of sales
+for all types of items except for the category ‘Others’. This suggests that the supermarket could focus on
+expanding their presence in these cities and potentially consider offering more variety of products in the
+‘Others’ category to boost sales in Tier 1 cities. 
 
 Based on these conclusions, some suggestions that could be made are:
 
-  1. Focus on Supermarket Type 1: As this type of supermarket has generated the most sales, 
-     we can focus on opening more Type 1 supermarkets in areas where there is a higher demand for our products.
+1. Focus on Supermarket Type 1: As this type of supermarket has generated the most sales, we can focus
+on opening more Type 1 supermarkets in areas where there is a higher demand for our products.
 
-  2. Target Tier 2 and 3 cities: Since these cities have outperformed Tier 1 cities in terms of sales, 
-     we can consider expanding our presence in these areas by opening more outlets and providing more variety of products that are in high demand.
+2. Target Tier 2 and 3 cities: Since these cities have outperformed Tier 1 cities in terms of sales, we can
+consider expanding our presence in these areas by opening more outlets and providing more variety of
+products that are in high demand.
 
-  3. Optimize Outlet Size: Medium-sized outlets have been the most successful in terms of sales, 
-     indicating that we can optimize our outlet size to maintain a balance between having enough product variety and providing a comfortable shopping experience for customers.
+3. Optimize Outlet Size: Medium-sized outlets have been the most successful in terms of sales, indicating
+that we can optimize our outlet size to maintain a balance between having enough product variety and
+providing a comfortable shopping experience for customers.
 
-  4. Promote Household Items: As this category has been the most popular, 
-     we can focus on promoting and offering more household items in our stores to cater to the high demand.
+4. Promote Household Items: As this category has been the most popular, we can focus on promoting
+and offering more household items in our stores to cater to the high demand.
 
-  5. Offer More Variety in ‘Others’ Category: As Tier 1 cities have shown lower sales for the ‘Others’ category, 
-     we can offer more variety of products in this category to boost sales in these areas.
+5. Offer More Variety in ‘Others’ Category: As Tier 1 cities have shown lower sales for the ‘Others’
+category, we can offer more variety of products in this category to boost sales in these areas.
 
-  6. Analyze Product Weight: We can analyze the reasons behind the higher sales of items with a weight of 12.6 units and potentially offer more products that are of a similar weight to cater to customer preferences.
+6. Analyze Product Weight: We can analyze the reasons behind the higher sales of items with a weight
+of 12.85765 units and potentially offer more products that are of a similar weight to cater to customer
+preferences.
 
-  7. Determine the impact of Product Visibility: We can conduct further analysis to determine the impact of product visibility on sales and optimize our product placement in stores accordingly.
+7. Determine the impact of Product Visibility: We can conduct further analysis to determine the impact
+of product visibility on sales and optimize our product placement in stores accordingly.
 
-By implementing these suggestions and continuing to analyze the sales data, we can make data-driven decisions that will help us optimize our purchasing patterns, improve sales, and launch a successful chain of supermarkets and grocery stores across the country.
+By implementing these suggestions and continuing to analyze the sales data, we can make data-driven
+decisions that will help us optimize our purchasing patterns, improve sales, and launch a successful chain of
+supermarkets and grocery stores across the country.
