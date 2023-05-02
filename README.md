@@ -1,4 +1,4 @@
-# Data-Analysis-and-Visualization-on-Retail-FMCG-dataset
+# Sales-Data-Analysis
 
 
 This project was completed using RStudio, a popular integrated development environment (IDE) for R. The goal of this project was to analyze sales data and provide insights and actionable recommendations to optimize the company's product offerings, marketing campaigns, and pricing strategies.
